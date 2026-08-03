@@ -21,6 +21,9 @@ use App\Livewire\App\ExpenseCategories\Index as ExpenseCategoriesIndex;
 use App\Livewire\App\Reports\Index as ReportsIndex;
 use App\Livewire\Marketing\Dashboard as MarketingDashboard;
 
+Route::get('/', function () {
+    return redirect('/login');
+});
 Route::get('/login', Login::class)->name('login')->middleware('guest');
 
 Route::middleware(['auth', 'tenant.role'])->prefix('app')->group(function () {
