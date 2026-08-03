@@ -10,7 +10,7 @@
         Aturan spesifik per-layanan akan dipakai lebih dulu. Kalau suatu layanan tidak punya aturan khusus, sistem akan pakai aturan <strong>Default (Semua Layanan)</strong>.
     </p>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="hidden md:block bg-white rounded-lg shadow overflow-hidden">
         <table class="w-full text-sm">
             <thead class="bg-gray-50 text-left">
                 <tr>
@@ -52,6 +52,43 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="md:hidden space-y-4">
+        @forelse($rules as $rule)
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="mb-2">
+                    @if($rule->service_id)
+                        <h3 class="font-bold">{{ $rule->service->name ?? '(layanan dihapus)' }}</h3>
+                    @else
+                        <h3 class="font-bold text-purple-600">Default (Semua Layanan)</h3>
+                    @endif
+                </div>
+                <div class="text-xs text-gray-400 space-y-1 mb-3">
+                    <p><i class="fa-solid fa-scale-balanced w-4"></i> {{ $rule->basis === 'percentage' ? 'Persentase' : 'Nominal Tetap' }}</p>
+                    <p><i class="fa-solid fa-coins w-4"></i> {{ $rule->basis === 'percentage' ? $rule->value.'%' : 'Rp'.number_format($rule->value, 0, ',', '.') }}</p>
+                </div>
+                <div class="flex gap-2 pt-2 border-t">
+                    <button
+                        wire:click="openEditModal({{ $rule->id }})"
+                        class="flex items-center gap-1 px-3 py-1.5 rounded bg-teal-50 text-teal-600 text-sm hover:bg-teal-100"
+                    >
+                        <i class="fa-solid fa-pen text-xs"></i> Edit
+                    </button>
+                    <button
+                        wire:click="delete({{ $rule->id }})"
+                        wire:confirm="Yakin ingin menghapus aturan ini?"
+                        class="flex items-center gap-1 px-3 py-1.5 rounded bg-red-50 text-red-600 text-sm hover:bg-red-100"
+                    >
+                        <i class="fa-solid fa-trash text-xs"></i> Hapus
+                    </button>
+                </div>
+            </div>
+        @empty
+            <div class="bg-white rounded-lg shadow p-8 text-center text-gray-500">
+                Belum ada aturan komisi.
+            </div>
+        @endforelse
     </div>
 
     @if($showModal)

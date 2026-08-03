@@ -23,7 +23,7 @@
         Total pengeluaran periode ini: <span class="font-semibold">Rp{{ number_format($totalFiltered, 0, ',', '.') }}</span>
     </div>
 
-    <div class="bg-white rounded-lg shadow overflow-x-auto">
+    <div class="hidden md:block bg-white rounded-lg shadow overflow-x-auto">
         <table class="w-full text-sm">
             <thead class="bg-gray-50 text-left">
                 <tr>
@@ -59,6 +59,41 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="md:hidden space-y-4">
+        @forelse($expenses as $expense)
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="font-bold">{{ $expense->title }}</h3>
+                    <span class="font-bold text-teal-600">Rp{{ number_format($expense->amount, 0, ',', '.') }}</span>
+                </div>
+                <div class="text-xs text-gray-400 space-y-1 mb-3">
+                    <p><i class="fa-solid fa-calendar w-4"></i> {{ $expense->expense_date->format('d M Y') }}</p>
+                    <p><i class="fa-solid fa-tag w-4"></i> {{ $expense->category->name ?? '-' }}</p>
+                    <p><i class="fa-solid fa-store w-4"></i> {{ $expense->outlet->name }}</p>
+                </div>
+                <div class="flex gap-2 pt-2 border-t">
+                    <button
+                        wire:click="openEditModal({{ $expense->id }})"
+                        class="flex items-center gap-1 px-3 py-1.5 rounded bg-teal-50 text-teal-600 text-sm hover:bg-teal-100"
+                    >
+                        <i class="fa-solid fa-pen text-xs"></i> Edit
+                    </button>
+                    <button
+                        wire:click="delete({{ $expense->id }})"
+                        wire:confirm="Yakin ingin menghapus catatan pengeluaran ini?"
+                        class="flex items-center gap-1 px-3 py-1.5 rounded bg-red-50 text-red-600 text-sm hover:bg-red-100"
+                    >
+                        <i class="fa-solid fa-trash text-xs"></i> Hapus
+                    </button>
+                </div>
+            </div>
+        @empty
+            <div class="bg-white rounded-lg shadow p-8 text-center text-gray-500">
+                Belum ada pengeluaran tercatat.
+            </div>
+        @endforelse
     </div>
 
     <div class="mt-4">

@@ -6,7 +6,7 @@
         </button>
     </div>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="hidden md:block bg-white rounded-lg shadow overflow-hidden">
         <table class="w-full text-sm">
             <thead class="bg-gray-50 text-left">
                 <tr>
@@ -46,6 +46,42 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="md:hidden space-y-4">
+        @forelse($employees as $employee)
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="font-bold">{{ $employee->name }}</h3>
+                    <span class="px-2 py-1 rounded text-xs {{ $employee->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
+                        {{ $employee->is_active ? 'Aktif' : 'Nonaktif' }}
+                    </span>
+                </div>
+                <div class="text-xs text-gray-400 space-y-1 mb-3">
+                    <p><i class="fa-solid fa-store w-4"></i> {{ $employee->outlet->name ?? '-' }}</p>
+                    <p><i class="fa-solid fa-money-bill w-4"></i> {{ $employee->payroll_type === 'flat' ? 'Gaji Tetap' : 'Komisi' }}</p>
+                </div>
+                <div class="flex gap-2 pt-2 border-t">
+                    <button
+                        wire:click="openEditModal({{ $employee->id }})"
+                        class="flex items-center gap-1 px-3 py-1.5 rounded bg-teal-50 text-teal-600 text-sm hover:bg-teal-100"
+                    >
+                        <i class="fa-solid fa-pen text-xs"></i> Edit
+                    </button>
+                    <button
+                        wire:click="delete({{ $employee->id }})"
+                        wire:confirm="Yakin ingin menghapus karyawan ini?"
+                        class="flex items-center gap-1 px-3 py-1.5 rounded bg-red-50 text-red-600 text-sm hover:bg-red-100"
+                    >
+                        <i class="fa-solid fa-trash text-xs"></i> Hapus
+                    </button>
+                </div>
+            </div>
+        @empty
+            <div class="bg-white rounded-lg shadow p-8 text-center text-gray-500">
+                Belum ada karyawan.
+            </div>
+        @endforelse
     </div>
 
     @if($showModal)

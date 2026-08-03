@@ -15,7 +15,7 @@
         </select>
     </div>
 
-    <div class="bg-white rounded-lg shadow overflow-x-auto">
+    <div class="hidden md:block bg-white rounded-lg shadow overflow-x-auto">
         <table class="w-full text-sm">
             <thead class="bg-gray-50 text-left">
                 <tr>
@@ -85,6 +85,81 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="md:hidden space-y-4">
+        @forelse($records as $record)
+            @php
+                $badgeColor = match($record->status) {
+                    'draft' => 'bg-gray-100 text-gray-600',
+                    'unpaid' => 'bg-yellow-100 text-yellow-700',
+                    'paid' => 'bg-green-100 text-green-700',
+                };
+            @endphp
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="font-bold">{{ $record->employee->name }}</h3>
+                    <span class="px-2 py-1 rounded text-xs {{ $badgeColor }}">
+                        {{ ['draft' => 'Draft', 'unpaid' => 'Siap Dibayar', 'paid' => 'Sudah Dibayar'][$record->status] }}
+                    </span>
+                </div>
+
+                <div class="text-xs text-gray-400 space-y-1 mb-3">
+                    <p><i class="fa-solid fa-store w-4"></i> {{ $record->employee->outlet->name ?? '-' }}</p>
+                    <p><i class="fa-solid fa-calendar w-4"></i> {{ $record->period_start->format('d M') }} - {{ $record->period_end->format('d M Y') }}</p>
+                </div>
+
+                <div class="bg-gray-50 rounded p-3 mb-3">
+                    <ul class="text-xs text-gray-600 space-y-0.5">
+                        @if($record->type === 'flat')
+                            <li>Gaji Tetap: Rp{{ number_format($record->base_amount, 0, ',', '.') }}</li>
+                        @else
+                            <li>Komisi: Rp{{ number_format($record->commission_total, 0, ',', '.') }}</li>
+                        @endif
+                        @foreach($record->details as $detail)
+                            <li>{{ $detail->name_snapshot }}: Rp{{ number_format($detail->amount, 0, ',', '.') }}</li>
+                        @endforeach
+                    </ul>
+                    <div class="flex justify-between items-center pt-2 mt-2 border-t font-bold text-sm">
+                        <span>Total</span>
+                        <span>Rp{{ number_format($record->total_amount, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 pt-2 border-t">
+                    @if($record->status !== 'paid')
+                        <button
+                            wire:click="openEditPayrollModal({{ $record->id }})"
+                            class="flex items-center gap-1 px-3 py-1.5 rounded bg-teal-50 text-teal-600 text-sm hover:bg-teal-100"
+                        >
+                            <i class="fa-solid fa-pen text-xs"></i> Edit
+                        </button>
+                    @endif
+                    @if($record->status === 'draft')
+                        <button
+                            wire:click="markUnpaid({{ $record->id }})"
+                            class="flex items-center gap-1 px-3 py-1.5 rounded bg-yellow-50 text-yellow-600 text-sm hover:bg-yellow-100"
+                        >
+                            <i class="fa-solid fa-clock text-xs"></i> Siapkan Bayar
+                        </button>
+                    @elseif($record->status === 'unpaid')
+                        <button
+                            wire:click="markPaid({{ $record->id }})"
+                            wire:confirm="Tandai payroll ini sudah dibayar?"
+                            class="flex items-center gap-1 px-3 py-1.5 rounded bg-green-50 text-green-600 text-sm hover:bg-green-100"
+                        >
+                            <i class="fa-solid fa-check text-xs"></i> Tandai Dibayar
+                        </button>
+                    @else
+                        <span class="text-gray-400 text-xs py-1.5">Dibayar {{ $record->paid_at?->format('d M Y') }}</span>
+                    @endif
+                </div>
+            </div>
+        @empty
+            <div class="bg-white rounded-lg shadow p-8 text-center text-gray-500">
+                Belum ada data payroll.
+            </div>
+        @endforelse
     </div>
 
     <div class="mt-4">

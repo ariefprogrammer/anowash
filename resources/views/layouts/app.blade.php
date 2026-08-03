@@ -10,7 +10,7 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <nav
-        x-data="{ mobileOpen: false, masterOpen: false }"
+        x-data="{ mobileOpen: false, masterOpen: false, expenseOpen: false }"
         class="bg-white shadow px-6 py-3 relative"
     >
         <div class="flex justify-between items-center">
@@ -53,7 +53,27 @@
                     @endif
 
                     <a href="{{ route('app.orders') }}" class="text-sm text-gray-600 hover:text-teal-600">Order</a>
-                    <a href="{{ route('app.expenses') }}" class="text-sm text-gray-600 hover:text-teal-600">Pengeluaran</a>
+                    <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+                        <button
+                            @click="open = !open"
+                            class="text-sm text-gray-600 hover:text-teal-600 flex items-center gap-1"
+                        >
+                            Pengeluaran
+                            <svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <div
+                            x-show="open"
+                            x-transition
+                            x-cloak
+                            class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border py-2 z-40"
+                        >
+                            <a href="{{ route('app.expense-categories') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Kategori Pengeluaran</a>
+                            <a href="{{ route('app.expenses') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Input Pengeluaran</a>
+                        </div>
+                    </div>
 
                     @if(auth()->user()->role === 'owner')
                         <a href="{{ route('app.payroll') }}" class="text-sm text-gray-600 hover:text-teal-600">Payroll</a>
@@ -118,7 +138,19 @@
             </div>
 
             <a href="{{ route('app.orders') }}" class="px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded">Order</a>
-            <a href="{{ route('app.expenses') }}" class="px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded">Pengeluaran</a>
+            <button
+                @click="expenseOpen = !expenseOpen"
+                class="px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded flex items-center justify-between"
+            >
+                Pengeluaran
+                <svg class="w-3 h-3 transition-transform" :class="expenseOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div x-show="expenseOpen" x-transition x-cloak class="pl-4 flex flex-col gap-1">
+                <a href="{{ route('app.expense-categories') }}" class="px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded">Kategori Pengeluaran</a>
+                <a href="{{ route('app.expenses') }}" class="px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded">Input Pengeluaran</a>
+            </div>
 
             @if(auth()->user()->role === 'owner')
                 <a href="{{ route('app.payroll') }}" class="px-2 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded">Payroll</a>
