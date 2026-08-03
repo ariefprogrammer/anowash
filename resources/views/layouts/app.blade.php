@@ -42,12 +42,12 @@
                             class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border py-2 z-40"
                         >
                             <a href="{{ route('app.staff') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Admin</a>
-                            <a href="{{ route('app.employees') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Karyawan</a>
-                            <a href="{{ route('app.commission-rules') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Aturan Komisi</a>
                             <a href="{{ route('app.allowance-types') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Tunjangan</a>
+                            <a href="{{ route('app.employees') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Karyawan</a>
                             <a href="{{ route('app.vehicle-categories') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Kategori Kendaraan</a>
                             <a href="{{ route('app.services') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Layanan</a>
                             <a href="{{ route('app.pricing') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Harga Layanan</a>
+                            <a href="{{ route('app.commission-rules') }}" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-teal-600">Aturan Komisi</a>
                         </div>
                     </div>
                     @endif
