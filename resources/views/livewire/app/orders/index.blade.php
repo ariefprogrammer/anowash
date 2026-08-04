@@ -7,7 +7,7 @@
     </div>
 
     <div class="mb-4 flex items-center gap-3">
-        <select wire:model.live="statusFilter" class="border rounded px-3 py-2 text-sm">
+        <select wire:model.live="statusFilter" class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm">
             <option value="">Semua Status</option>
             <option value="pending">Pending</option>
             <option value="in_progress">In Progress</option>
@@ -16,7 +16,7 @@
             <option value="cancelled">Cancelled</option>
         </select>
 
-        <input type="date" wire:model.live="dateFilter" class="border rounded px-3 py-2 text-sm">
+        <input type="date" wire:model.live="dateFilter" class="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm">
 
         @if($dateFilter !== now()->toDateString())
             <button wire:click="$set('dateFilter', '{{ now()->toDateString() }}')" class="text-xs text-teal-600 hover:underline">
@@ -175,7 +175,7 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Metode Pembayaran</label>
-                        <select wire:model.live="payMethod" class="w-full border rounded px-3 py-2">
+                        <select wire:model.live="payMethod" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                             <option value="Cash">Cash</option>
                             <option value="QRIS">QRIS</option>
                             <option value="Transfer">Transfer</option>
@@ -185,7 +185,7 @@
                     @if($payMethod === 'Cash')
                         <div>
                             <label class="block text-sm font-medium mb-1">Nominal Dibayar (Rp)</label>
-                            <input type="number" step="0.01" wire:model.live="amountPaid" class="w-full border rounded px-3 py-2">
+                            <input type="number" step="0.01" wire:model.live="amountPaid" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                             @error('amountPaid') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
                     @endif

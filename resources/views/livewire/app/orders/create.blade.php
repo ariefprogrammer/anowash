@@ -5,7 +5,7 @@
         @if($outlets->count() > 0)
             <div>
                 <label class="block text-sm font-medium mb-1">Outlet</label>
-                <select wire:model.live="outletId" class="w-full border rounded px-3 py-2">
+                <select wire:model.live="outletId" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                     @foreach($outlets as $outlet)
                         <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
                     @endforeach
@@ -16,7 +16,7 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium mb-1">Plat Nomor</label>
-                <input type="text" wire:model.live.debounce.500ms="plateNumber" class="w-full border rounded px-3 py-2 uppercase" placeholder="B 1234 XYZ">
+                <input type="text" wire:model.live.debounce.500ms="plateNumber" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 uppercase" placeholder="B 1234 XYZ">
                 @error('plateNumber') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 @if($vehicleFound)
                     <span class="text-xs text-green-600">Kendaraan ditemukan — data terisi otomatis.</span>
@@ -25,7 +25,7 @@
 
             <div>
                 <label class="block text-sm font-medium mb-1">Kategori Kendaraan</label>
-                <select wire:model.live="vehicleCategoryId" class="w-full border rounded px-3 py-2">
+                <select wire:model.live="vehicleCategoryId" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                     <option value="">-- Pilih --</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -63,27 +63,27 @@
             >
                 <div>
                     <label class="block text-sm font-medium mb-1">Merek (opsional)</label>
-                    <input type="text" wire:model="vehicleBrand" class="w-full border rounded px-3 py-2">
+                    <input type="text" wire:model="vehicleBrand" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Model (opsional)</label>
-                    <input type="text" wire:model="vehicleModel" class="w-full border rounded px-3 py-2">
+                    <input type="text" wire:model="vehicleModel" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Nama Pelanggan (opsional)</label>
-                    <input type="text" wire:model="customerName" class="w-full border rounded px-3 py-2">
+                    <input type="text" wire:model="customerName" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">No. HP Pelanggan (opsional)</label>
-                    <input type="text" wire:model="customerPhone" class="w-full border rounded px-3 py-2">
+                    <input type="text" wire:model="customerPhone" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Catatan</label>
-                    <textarea wire:model="notes" rows="2" class="w-full border rounded px-3 py-2"></textarea>
+                    <textarea wire:model="notes" rows="2" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2"></textarea>
                 </div>
             </div>
         </div>
@@ -94,23 +94,31 @@
                 <button type="button" wire:click="addItem" class="text-teal-600 text-sm hover:underline">+ Tambah Item</button>
             </div>
 
-            <div class="space-y-2">
+            <div class="space-y-3 md:space-y-2">
                 @foreach($items as $index => $item)
-                    <div class="flex gap-2 items-start">
-                        <select wire:model="items.{{ $index }}.service_id" wire:change="onServiceChange({{ $index }})" class="flex-1 border rounded px-3 py-2">
+                    <div class="border border-gray-200 rounded-lg p-3 md:border-0 md:rounded-none md:p-0 flex flex-col md:flex-row gap-2 md:items-start">
+                        <select wire:model="items.{{ $index }}.service_id" wire:change="onServiceChange({{ $index }})" class="w-full md:flex-1 bg-white border border-gray-200 rounded-lg px-3 py-2">
                             <option value="">-- Pilih Layanan --</option>
                             @foreach($services as $service)
                                 <option value="{{ $service->id }}">{{ $service->name }}</option>
                             @endforeach
                         </select>
 
-                        <input type="number" wire:model="items.{{ $index }}.quantity" min="1" class="w-20 border rounded px-3 py-2" placeholder="Qty">
+                        <div class="flex gap-2">
+                            <div class="flex-1 md:flex-none">
+                                <label class="text-xs text-gray-400 md:hidden">Qty</label>
+                                <input type="number" wire:model="items.{{ $index }}.quantity" min="1" class="w-full md:w-20 bg-white border border-gray-200 rounded-lg px-3 py-2" placeholder="Qty">
+                            </div>
 
-                        <input type="number" step="0.01" wire:model="items.{{ $index }}.price" class="w-32 border rounded px-3 py-2" placeholder="Harga">
+                            <div class="flex-1 md:flex-none">
+                                <label class="text-xs text-gray-400 md:hidden">Harga</label>
+                                <input type="number" step="0.01" wire:model="items.{{ $index }}.price" class="w-full md:w-32 bg-white border border-gray-200 rounded-lg px-3 py-2" placeholder="Harga">
+                            </div>
 
-                        @if(count($items) > 1)
-                            <button type="button" wire:click="removeItem({{ $index }})" class="text-red-600 px-2">&times;</button>
-                        @endif
+                            @if(count($items) > 1)
+                                <button type="button" wire:click="removeItem({{ $index }})" class="text-red-600 px-2 self-end pb-2 md:self-auto md:pb-0">&times;</button>
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -141,12 +149,12 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">Diskon (Rp)</label>
-                            <input type="number" step="0.01" wire:model.live="discount" class="w-full border rounded px-3 py-2">
+                            <input type="number" step="0.01" wire:model.live="discount" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Metode Pembayaran</label>
-                            <select wire:model="paymentMethod" class="w-full border rounded px-3 py-2">
+                            <select wire:model="paymentMethod" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2">
                                 <option value="Cash">Cash</option>
                                 <option value="QRIS">QRIS</option>
                                 <option value="Transfer">Transfer</option>
