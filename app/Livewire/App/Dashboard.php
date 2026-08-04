@@ -20,7 +20,7 @@ class Dashboard extends Component
             ? [$user->outlet_id]
             : Outlet::where('owner_id', $user->owner_id)->pluck('id')->all();
 
-        $revenueQuery = fn () => Order::whereIn('outlet_id', $outletIds)->where('status', 'paid');
+        $revenueQuery = fn () => Order::whereIn('outlet_id', $outletIds)->where('payment_status', 'paid');
         $vehicleQuery = fn () => Order::whereIn('outlet_id', $outletIds)->where('status', '!=', 'cancelled');
 
         $today = Carbon::today();
