@@ -86,7 +86,7 @@ class Index extends Component
                     $baseAmount = 0;
                     $commissionTotal = OrderItemWorker::where('employee_id', $employee->id)
                         ->whereHas('orderItem.order', function ($query) use ($validated) {
-                            $query->where('status', 'paid')
+                            $query->where('payment_status', 'paid')
                                 ->whereBetween('paid_at', [$validated['periodStart'].' 00:00:00', $validated['periodEnd'].' 23:59:59']);
                         })
                         ->sum('commission_amount');
@@ -129,7 +129,7 @@ class Index extends Component
     {
         $record = $this->authorizedRecord($id);
 
-        if ($record->status === 'paid') {
+        if ($record->payment_status === 'paid') {
             $this->dispatch('notify', message: 'Payroll yang sudah dibayar tidak bisa diedit.', type: 'error');
             return;
         }
@@ -170,7 +170,7 @@ class Index extends Component
     {
         $record = $this->authorizedRecord($this->editingPayrollId);
 
-        if ($record->status === 'paid') {
+        if ($record->payment_status === 'paid') {
             $this->dispatch('notify', message: 'Payroll yang sudah dibayar tidak bisa diedit.', type: 'error');
             $this->showEditModal = false;
             return;
@@ -222,13 +222,13 @@ class Index extends Component
 
     public function markUnpaid(int $id): void
     {
-        $this->authorizedRecord($id)->update(['status' => 'unpaid']);
+        $this->authorizedRecord($id)->update(['payment_status' => 'unpaid']);
         $this->dispatch('notify', message: 'Payroll ditandai siap dibayar.');
     }
 
     public function markPaid(int $id): void
     {
-        $this->authorizedRecord($id)->update(['status' => 'paid', 'paid_at' => now()]);
+        $this->authorizedRecord($id)->update(['payment_status' => 'paid', 'paid_at' => now()]);
         $this->dispatch('notify', message: 'Payroll ditandai sudah dibayar.');
     }
 

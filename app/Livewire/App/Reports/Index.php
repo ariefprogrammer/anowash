@@ -51,7 +51,7 @@ class Index extends Component
             ->count();
 
         $revenue = Order::whereIn('outlet_id', $outletIds)
-            ->where('status', 'paid')
+            ->where('payment_status', 'paid')
             ->whereBetween('paid_at', [$periodStart, $periodEnd])
             ->sum('total');
 
@@ -77,7 +77,7 @@ class Index extends Component
         $employeeReports = $employees->map(function ($employee) use ($periodStart, $periodEnd, $payrollRecords) {
             $assignments = OrderItemWorker::where('employee_id', $employee->id)
                 ->whereHas('orderItem.order', function ($query) use ($periodStart, $periodEnd) {
-                    $query->where('status', 'paid')->whereBetween('paid_at', [$periodStart, $periodEnd]);
+                    $query->where('payment_status', 'paid')->whereBetween('paid_at', [$periodStart, $periodEnd]);
                 })
                 ->with(['orderItem.order'])
                 ->get();
